@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080f16" />
+    <meta
+      name="description"
+      content="Pilota una persecución espacial en primera persona y descubre cómo Repeated Forward A* encuentra su camino en un universo desconocido."
+    />
+    <title>Caza Hiperespacial A* · ORION Flight Systems</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="flight-deck">
+      <header class="masthead">
+        <a class="brand" href="./" aria-label="ORION, inicio"
+          ><span class="brand-mark">◈</span><span>ORION<small>FLIGHT SYSTEMS</small></span></a
+        >
+        <div class="mission-title">
+          <span class="eyebrow">SIMULADOR DE NAVEGACIÓN PROCEDURAL</span>
+          <h1>CAZA HIPERESPACIAL <span>A*</span></h1>
+        </div>
+        <div class="system-status">
+          <span class="status-dot"></span
+          ><span>SISTEMAS EN LÍNEA<small>RF–A* / V.01.00</small></span
+          ><button
+            id="help-button"
+            class="icon-button"
+            aria-label="Abrir guía de vuelo"
+            title="Guía de vuelo"
+          >
+            ?
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="windshield" aria-label="Vista de pilotaje 3D">
+          <div id="space-view"></div>
+          <div class="window-vignette"></div>
+          <div class="canopy canopy-left"></div>
+          <div class="canopy canopy-right"></div>
+          <div class="overhead-bar">
+            <span><i class="status-dot"></i> <span id="biome-label">ESPACIO PROFUNDO</span></span
+            ><span id="phase-label">INICIALIZANDO SISTEMAS</span
+            ><span id="sector-label">SECTOR 01 / 03</span>
+          </div>
+          <div class="hud hud-left">
+            <span class="hud-kicker">NAVE INTERCEPTORA</span><strong>RAPTOR <em>07</em></strong>
+            <div class="hud-rule"></div>
+            <span>COORDENADAS</span><b id="hud-position">01 : 07</b
+            ><span>RUMBO <b id="hud-heading">090° E</b></span>
+          </div>
+          <div class="hud hud-right">
+            <span class="hud-kicker">OBJETIVO EN SEGUIMIENTO</span
+            ><strong>FUGITIVO <em>01</em></strong>
+            <div class="hud-rule"></div>
+            <span>DISTANCIA MANHATTAN</span
+            ><b><span id="hud-distance">22</span> <small>NODOS</small></b
+            ><span class="target-signal">▂ ▃ ▅ ▆ ▇ &nbsp; BALIZA ACTIVA</span>
+          </div>
+          <div class="compass" aria-hidden="true">
+            <span>270</span><i></i><span>000</span><i></i><b id="compass-heading">090</b><i></i
+            ><span>180</span><i></i><span>270</span>
+          </div>
+          <div class="flight-reticle" aria-hidden="true">
+            <span></span><i></i><b>+</b><i></i><span></span
+            ><small id="reticle-label">RUTA TRAZADA</small>
+          </div>
+          <div id="flight-alert" class="flight-alert" role="status" aria-live="polite"></div>
+          <div class="windshield-bottom">
+            <span><i></i> CÁMARA POV <b>01</b></span
+            ><span id="flight-instruction">ESCÁNER LISTO · AVANZA PARA EXPLORAR</span
+            ><span>ENLACE <b>100%</b> <i></i></span>
+          </div>
+          <div class="cockpit-sill"></div>
+        </section>
+
+        <section class="instrument-deck" aria-label="Instrumentación de cabina">
+          <div class="deck-label">
+            <span><b>●</b> CONSOLA TÁCTICA</span
+            ><span class="deck-center"
+              >REPEATED FORWARD A* <i>/</i> EXPLORAR. RECALCULAR. INTERCEPTAR.</span
+            ><span id="mission-seed">MISIÓN ORION-042</span>
+          </div>
+          <div class="mfd-grid">
+            <section class="mfd telemetry-panel">
+              <header class="mfd-header">
+                <h2><span>01</span> TELEMETRÍA</h2>
+                <i class="screen-dot"></i>
+              </header>
+              <div class="mfd-body telemetry-body">
+                <div class="node-line">
+                  <span>NODO ACTUAL <i>n</i></span
+                  ><b id="node-value">(01, 07)</b>
+                </div>
+                <div class="math-grid">
+                  <div>
+                    <span>COSTE REAL <i>g(n)</i></span
+                    ><strong id="g-value">00</strong><small>COMBUSTIBLE</small>
+                  </div>
+                  <div>
+                    <span>HEURÍSTICA <i>h(n)</i></span
+                    ><strong id="h-value">22</strong><small>MANHATTAN</small>
+                  </div>
+                </div>
+                <div class="f-line">
+                  <span>PRIORIDAD <i>f = g + h</i></span
+                  ><strong id="f-value">22</strong>
+                </div>
+                <div class="telemetry-footer">
+                  <span>RECÁLCULOS <b id="recalc-value">00</b></span
+                  ><span>PASOS <b id="step-value">00</b></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="mfd radar-panel">
+              <header class="mfd-header">
+                <h2><span>02</span> MAPA TÁCTICO</h2>
+                <div class="radar-header-info">
+                  <span>24 × 14</span><i class="screen-dot"></i> LIVE
+                </div>
+              </header>
+              <div class="radar-toolbar">
+                <span><i></i> RADIO DE ESCANEO <b>01</b></span
+                ><span id="known-count">30 / 336 NODOS</span>
+              </div>
+              <div class="radar-wrap">
+                <canvas
+                  id="radar"
+                  aria-label="Mapa táctico: nave, ruta hipotética, peligros descubiertos y balizas"
+                  role="img"
+                ></canvas>
+                <div id="radar-tooltip" class="radar-tooltip" hidden></div>
+              </div>
+              <div class="map-sector-labels">
+                <span>01 <b>ESPACIO PROFUNDO</b></span
+                ><span>02 <b>ÓRBITA PLANETARIA</b></span
+                ><span>03 <b>OTRA GALAXIA</b></span>
+              </div>
+              <div class="radar-legend">
+                <span><i class="legend-ship"></i>Nave</span
+                ><span><i class="legend-route"></i>Ruta A*</span
+                ><span><i class="legend-trail"></i>Estela</span
+                ><span><i class="legend-solid"></i>Obstáculo</span
+                ><span><i class="legend-anomaly"></i>Coste +2</span
+                ><span><i class="legend-beacon"></i>Baliza</span>
+              </div>
+            </section>
+
+            <section class="mfd scanner-panel">
+              <header class="mfd-header">
+                <h2><span>03</span> ESCÁNER LOCAL</h2>
+                <span class="header-tag">R = 1</span>
+              </header>
+              <div class="mfd-body scanner-body">
+                <div class="scanner-visual">
+                  <div class="scanner-ring"></div>
+                  <div class="scanner-ring inner"></div>
+                  <div class="scanner-cross"></div>
+                  <span class="scanner-center">▲</span>
+                  <div id="scan-N" class="scan-cell north"><b>N</b><span>?</span></div>
+                  <div id="scan-E" class="scan-cell east"><b>E</b><span>?</span></div>
+                  <div id="scan-S" class="scan-cell south"><b>S</b><span>?</span></div>
+                  <div id="scan-O" class="scan-cell west"><b>O</b><span>?</span></div>
+                </div>
+                <div class="scanner-caption">
+                  <span class="status-dot"></span
+                  ><span id="scanner-status">A LA ESPERA DE PULSO</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="mfd open-panel">
+              <header class="mfd-header">
+                <h2><span>04</span> <span id="open-title" class="plain">OPEN SET</span></h2>
+                <span class="header-tag" id="expanded-count">A*</span>
+              </header>
+              <div id="open-content" class="mfd-body open-body"></div>
+            </section>
+
+            <section class="mfd log-panel">
+              <header class="mfd-header">
+                <h2><span>05</span> BITÁCORA DE VUELO</h2>
+                <span class="header-tag" id="log-count">01 EVENTO</span>
+              </header>
+              <div class="mfd-body log-body">
+                <div
+                  id="event-log"
+                  class="event-log"
+                  role="log"
+                  aria-label="Eventos de vuelo"
+                ></div>
+                <div class="quick-controls">
+                  <label class="speed-control" for="speed"
+                    >VELOCIDAD
+                    <select id="speed" aria-label="Velocidad de simulación">
+                      <option value="0.65">0.65×</option>
+                      <option value="1" selected>1×</option>
+                      <option value="2">2×</option>
+                      <option value="4">4×</option>
+                    </select></label
+                  ><button
+                    id="audio-button"
+                    class="toggle-control"
+                    aria-pressed="false"
+                    title="Activar audio sintetizado"
+                  >
+                    <span>♪</span> AUDIO <b>OFF</b></button
+                  ><label
+                    class="block-control"
+                    title="Aplica un destino inaccesible a la siguiente persecución"
+                    ><input id="blocked-mode" type="checkbox" /><span class="switch"></span
+                    >BLOQUEO</label
+                  >
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="control-strip">
+            <div class="control-group">
+              <button id="back-button" class="control-button" disabled>
+                <span aria-hidden="true">↶</span> Regresar <kbd>←</kbd></button
+              ><button id="step-button" class="control-button primary">
+                <span aria-hidden="true">↦</span> Siguiente nodo <kbd>→</kbd></button
+              ><button id="auto-button" class="control-button auto">
+                <span>▶</span> Piloto automático <kbd>A</kbd>
+              </button>
+            </div>
+            <button id="new-button" class="control-button new">
+              <span>↗</span> Nueva persecución <kbd>N</kbd>
+            </button>
+          </div>
+          <footer class="deck-footer">
+            <span
+              ><i class="status-dot"></i><span id="footer-status">LISTO PARA DESPEGAR</span></span
+            ><span><b>g(n)</b> ACUMULADO CONTINUO <i>·</i> NIEBLA DE GUERRA ACTIVA</span
+            ><button id="guide-button">GUÍA DE VUELO <span>↗</span></button>
+          </footer>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="guide-dialog" aria-labelledby="guide-title">
+      <div class="dialog-content">
+        <div class="dialog-topline">
+          <span class="eyebrow">ORION / MANUAL DEL PILOTO</span
+          ><button id="close-guide" class="icon-button" aria-label="Cerrar guía">×</button>
+        </div>
+        <h2 id="guide-title">Tu destino es conocido.<br /><em>El camino, todavía no.</em></h2>
+        <p>
+          Intercepta al fugitivo en (22, 06). El ordenador planea sobre un mapa incompleto con
+          <strong>Repeated Forward A*</strong>: las celdas desconocidas se suponen despejadas hasta
+          que tu escáner demuestra lo contrario.
+        </p>
+        <div class="guide-steps">
+          <article>
+            <b>01</b>
+            <div>
+              <h3>Explora un nodo a la vez</h3>
+              <p>
+                Cada avance escanea los cuatro vecinos, revela sus costes y recalcula la ruta. No
+                hay diagonales.
+              </p>
+            </div>
+          </article>
+          <article>
+            <b>02</b>
+            <div>
+              <h3>Observa cómo decide A*</h3>
+              <p>
+                Prioriza menor f, después menor h y después el rumbo actual. g acumula todo el
+                combustible gastado, incluso al retroceder.
+              </p>
+            </div>
+          </article>
+          <article>
+            <b>03</b>
+            <div>
+              <h3>Sal de los callejones</h3>
+              <p>
+                Si el camino vuelve al nodo padre, la nave activa la reversa. El tramo descartado
+                queda en ámbar.
+              </p>
+            </div>
+          </article>
+          <article>
+            <b>04</b>
+            <div>
+              <h3>Experimenta sin perder el rumbo</h3>
+              <p>
+                Regresar restaura posición, rumbo, niebla y telemetría. El modo bloqueo se aplica al
+                iniciar una nueva persecución.
+              </p>
+            </div>
+          </article>
+        </div>
+        <p class="guide-note">
+          Ventanas atmosféricas en x = 8 y agujeros de gusano en x = 16. Las balizas y los límites
+          estructurales entre sectores están cartografiados desde el inicio. Tras la captura se
+          muestra el óptimo global con el mapa completo, como referencia.
+        </p>
+        <button id="start-flight" class="control-button primary">
+          ENTENDIDO · VOLVER A CABINA <span>→</span>
+        </button>
+      </div>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

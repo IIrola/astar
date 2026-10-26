@@ -1,0 +1,751 @@
+.flight-deck {
+  max-width: 1920px;
+  margin: auto;
+  background: #0a1118;
+  min-height: 100vh;
+}
+.masthead {
+  height: 78px;
+  padding: 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #263640;
+  background: #0b1219;
+  position: relative;
+  z-index: 2;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px;
+}
+.brand-mark {
+  font-size: 38px;
+  color: var(--mint);
+  line-height: 1;
+}
+.brand > span:last-child {
+  font-size: 21px;
+  letter-spacing: 6px;
+  color: #e2edee;
+  font-weight: 600;
+}
+.brand small {
+  display: block;
+  font: 7px var(--mono);
+  letter-spacing: 2.7px;
+  color: #82959f;
+  margin-top: 4px;
+}
+.mission-title {
+  text-align: center;
+}
+.mission-title .eyebrow {
+  font-size: 8px;
+  letter-spacing: 2.5px;
+}
+.mission-title h1 {
+  font-size: 18px;
+  letter-spacing: 3.2px;
+  font-weight: 500;
+  color: #e0e9eb;
+  margin: 8px 0 0;
+}
+.mission-title h1 span {
+  color: var(--mint);
+}
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font: 8px var(--mono);
+  letter-spacing: 1px;
+  min-width: 200px;
+  justify-content: flex-end;
+}
+.system-status small {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.system-status .icon-button {
+  margin-left: 10px;
+}
+.windshield {
+  height: clamp(310px, 43vh, 500px);
+  min-height: 310px;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 55% 90%, #123745, #03070e 75%);
+  border-bottom: 1px solid #416069;
+}
+.windshield canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#space-view {
+  position: absolute;
+  inset: 0;
+}
+.window-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow:
+    inset 0 20px 65px #0008,
+    inset 0 -24px 80px #03090f;
+  z-index: 1;
+  background: linear-gradient(90deg, #03101a30, transparent 40%, transparent 60%, #03101a40);
+}
+.canopy {
+  position: absolute;
+  z-index: 2;
+  top: -20px;
+  bottom: -50px;
+  width: 28px;
+  background: linear-gradient(90deg, #0a1016, #293d48 48%, #0d1a24 54%, #070d13);
+  border-right: 1px solid #4c626b;
+  border-left: 2px solid #060b10;
+  box-shadow: 0 0 15px #000b;
+  pointer-events: none;
+}
+.canopy-left {
+  left: 6%;
+  transform: rotate(-19deg);
+  transform-origin: bottom;
+}
+.canopy-right {
+  right: 6%;
+  transform: rotate(19deg);
+  transform-origin: bottom;
+}
+.overhead-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  z-index: 3;
+  left: 15%;
+  right: 15%;
+  top: 0;
+  height: 33px;
+  padding: 0 23px;
+  background: linear-gradient(180deg, #0d1a23f5, #0a141ec9);
+  border: 1px solid #2e454e;
+  border-top: 0;
+  clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+  font: 8px var(--mono);
+  letter-spacing: 1.2px;
+}
+.overhead-bar > span {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.overhead-bar > span:first-child {
+  color: var(--mint);
+}
+#phase-label {
+  color: #b8c9cd;
+}
+.hud {
+  position: absolute;
+  z-index: 3;
+  top: 26%;
+  font: 8px var(--mono);
+  letter-spacing: 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: #6fa6ae;
+  text-shadow: 0 0 15px #1fffe425;
+}
+.hud-left {
+  left: 12%;
+}
+.hud-right {
+  right: 12%;
+  text-align: right;
+  align-items: flex-end;
+}
+.hud .hud-kicker {
+  font-size: 7px;
+  letter-spacing: 1.5px;
+  color: #85a5af;
+}
+.hud > strong {
+  font-size: 17px;
+  letter-spacing: 2px;
+  color: #c6e8e8;
+  font-weight: 400;
+}
+.hud > strong em {
+  color: var(--mint);
+  font-size: 12px;
+  font-style: normal;
+  margin-left: 8px;
+}
+.hud > b {
+  font-size: 23px;
+  font-weight: 400;
+  color: var(--mint);
+  letter-spacing: 4px;
+}
+.hud > b small {
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+.hud-rule {
+  height: 1px;
+  width: 150px;
+  background: linear-gradient(90deg, #5c9da06b, transparent);
+  margin: 2px 0;
+}
+.hud-right .hud-rule {
+  transform: rotate(180deg);
+}
+.hud > span > b {
+  margin-left: 15px;
+  color: #bfdbdc;
+  font-weight: 400;
+}
+.target-signal {
+  margin-top: 2px;
+  font-size: 7px;
+}
+.compass {
+  position: absolute;
+  z-index: 3;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font: 8px var(--mono);
+  color: #6a969d;
+}
+.compass i {
+  width: 1px;
+  height: 6px;
+  background: #41636e;
+}
+.compass b {
+  position: relative;
+  color: var(--mint);
+  font-weight: 400;
+}
+.compass b:before {
+  content: '▾';
+  position: absolute;
+  top: -16px;
+  left: 5px;
+  font-size: 10px;
+}
+.flight-reticle {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 51%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #8cded5a6;
+}
+.flight-reticle b {
+  font: 20px var(--mono);
+  font-weight: 400;
+  margin: 0 12px;
+}
+.flight-reticle > span {
+  width: 27px;
+  height: 14px;
+  border-bottom: 1px solid #7abbb888;
+  border-right: 1px solid #7abbb888;
+}
+.flight-reticle > span:first-child {
+  transform: scaleX(-1);
+}
+.flight-reticle i {
+  display: block;
+  width: 6px;
+  height: 1px;
+  background: #7abbb888;
+}
+.flight-reticle small {
+  position: absolute;
+  white-space: nowrap;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  font: 7px var(--mono);
+  letter-spacing: 2px;
+  color: #84b8b9;
+}
+.windshield-bottom {
+  position: absolute;
+  bottom: 28px;
+  left: 13%;
+  right: 13%;
+  display: flex;
+  justify-content: space-between;
+  font: 7px var(--mono);
+  letter-spacing: 1.2px;
+  color: #7797a3;
+  z-index: 3;
+}
+.windshield-bottom span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.windshield-bottom b {
+  color: #c3dadb;
+  font-weight: 400;
+}
+.windshield-bottom i {
+  display: inline-block;
+  height: 4px;
+  width: 4px;
+  background: var(--mint);
+}
+#flight-instruction {
+  color: #90c9c6;
+}
+.cockpit-sill {
+  position: absolute;
+  bottom: -1px;
+  height: 20px;
+  width: 100%;
+  z-index: 3;
+  background: linear-gradient(180deg, #253c49, #121f29 30%, #0a141c 75%);
+  clip-path: polygon(0 0, 19% 60%, 81% 60%, 100% 0, 100% 100%, 0 100%);
+  border-bottom: 2px solid #47616c;
+}
+.flight-alert {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 66%;
+  transform: translateX(-50%);
+  font: 10px var(--mono);
+  letter-spacing: 2px;
+  color: var(--amber);
+  white-space: nowrap;
+  text-shadow: 0 0 22px currentColor;
+}
+.flight-alert.success {
+  color: var(--mint);
+}
+.flight-alert.danger {
+  color: var(--danger);
+}
+.instrument-deck {
+  padding: 0 28px;
+  background: radial-gradient(ellipse at 50% 0, #1c2b36, #101a23 60%);
+  position: relative;
+}
+.deck-label {
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: 8px var(--mono);
+  letter-spacing: 1.2px;
+  color: #657e8c;
+}
+.deck-label > span:first-child {
+  color: #a4bac3;
+}
+.deck-label b {
+  font-size: 6px;
+  margin-right: 7px;
+  color: var(--mint);
+}
+.deck-label i {
+  font-style: normal;
+  margin: 0 12px;
+  color: #3f5967;
+}
+.deck-center {
+  font-size: 7px;
+  letter-spacing: 1.2px;
+}
+.control-strip {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 17px 0;
+  border-bottom: 1px solid #2a3a44;
+}
+.control-group {
+  display: flex;
+  gap: 10px;
+}
+.control-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 18px;
+  min-height: 45px;
+  min-width: 160px;
+  border: 1px solid #3b505d;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #24323e, #192630);
+  box-shadow:
+    0 3px 0 #071018,
+    0 0 0 1px #08121b;
+  font-size: 11px;
+  letter-spacing: 0.2px;
+  color: #c0cdd3;
+  transition:
+    background 0.18s,
+    box-shadow 0.18s,
+    transform 0.18s;
+}
+.control-button > span {
+  font-size: 16px;
+}
+.control-button svg {
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+.control-button kbd {
+  font: 9px var(--mono);
+  border: 1px solid #51636b60;
+  color: #748e98;
+  padding: 3px 4px;
+  border-radius: 2px;
+  min-width: 18px;
+  text-align: center;
+  margin-left: 5px;
+}
+.control-button.primary {
+  background: linear-gradient(180deg, #77e4cf, #5dc1ac);
+  color: #0b3833;
+  border-color: #8ae7d4;
+  box-shadow:
+    0 3px 0 #245d53,
+    0 0 22px #62debf0d;
+  font-weight: 600;
+  min-width: 215px;
+}
+.control-button.primary kbd {
+  color: #245b51;
+  border-color: #245b5150;
+}
+.control-button.new {
+  color: var(--amber);
+  border-color: #826447;
+  background: linear-gradient(180deg, #34332e, #252720);
+  min-width: 205px;
+}
+.control-button:hover:enabled {
+  filter: brightness(1.16);
+  box-shadow:
+    0 3px 0 #071018,
+    0 0 16px #67e1cf10;
+}
+.control-button:active:enabled {
+  transform: translateY(2px);
+}
+.control-button:disabled {
+  opacity: 0.36;
+}
+.control-button.auto.active {
+  color: var(--mint);
+  border-color: var(--mint);
+  background: #21443e;
+}
+.deck-footer {
+  min-height: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font: 7px var(--mono);
+  letter-spacing: 0.7px;
+  color: #66808d;
+}
+.deck-footer > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.deck-footer b {
+  font-weight: 400;
+  color: #86a1ac;
+}
+.deck-footer i {
+  font-style: normal;
+  margin: 0 10px;
+}
+.deck-footer button {
+  border: 0;
+  background: none;
+  color: #8ca5af;
+  font: 7px var(--mono);
+  letter-spacing: 0.7px;
+  padding: 8px 0;
+}
+.deck-footer button:hover {
+  color: var(--mint);
+}
+.deck-footer button span {
+  margin-left: 10px;
+  color: var(--mint);
+}
+@media (min-width: 1600px) {
+  .masthead {
+    padding: 0 48px;
+  }
+  .instrument-deck {
+    padding: 0 42px;
+  }
+  .windshield {
+    height: 45vh;
+  }
+  .hud {
+    top: 30%;
+  }
+  .control-button {
+    min-height: 49px;
+  }
+  .deck-label {
+    height: 45px;
+  }
+}
+@media (max-width: 1050px) {
+  .masthead {
+    padding: 0 20px;
+  }
+  .mission-title h1 {
+    font-size: 15px;
+    letter-spacing: 2px;
+  }
+  .brand,
+  .system-status {
+    min-width: 150px;
+  }
+  .system-status {
+    font-size: 7px;
+  }
+  .system-status .icon-button {
+    margin-left: 2px;
+  }
+  .instrument-deck {
+    padding: 0 16px;
+  }
+  .deck-center {
+    display: none;
+  }
+  .hud-left {
+    left: 11%;
+  }
+  .hud-right {
+    right: 11%;
+  }
+  .control-button {
+    min-width: 130px;
+    padding: 0 12px;
+    gap: 8px;
+    font-size: 10px;
+  }
+  .control-button.primary {
+    min-width: 175px;
+  }
+  .control-button.new {
+    min-width: 170px;
+  }
+  .control-button kbd {
+    display: none;
+  }
+  .overhead-bar {
+    left: 10%;
+    right: 10%;
+  }
+  .overhead-bar #phase-label {
+    font-size: 7px;
+  }
+  .deck-footer > span:nth-child(2) {
+    font-size: 6px;
+  }
+  .windshield-bottom {
+    left: 9%;
+    right: 9%;
+  }
+}
+@media (max-width: 740px) {
+  .masthead {
+    height: 72px;
+    padding: 0 16px;
+  }
+  .brand {
+    min-width: initial;
+    gap: 7px;
+  }
+  .brand-mark {
+    font-size: 30px;
+  }
+  .brand > span:last-child {
+    font-size: 16px;
+    letter-spacing: 4px;
+  }
+  .brand small {
+    font-size: 5px;
+    letter-spacing: 1.6px;
+  }
+  .mission-title {
+    margin-left: 14px;
+    text-align: right;
+  }
+  .mission-title h1 {
+    font-size: 12px;
+    letter-spacing: 1.2px;
+  }
+  .mission-title .eyebrow {
+    font-size: 5px;
+    letter-spacing: 1px;
+  }
+  .system-status {
+    display: none;
+  }
+  .windshield {
+    height: 340px;
+    min-height: 290px;
+  }
+  .hud {
+    top: 30%;
+    font-size: 6px;
+    gap: 9px;
+  }
+  .hud-left {
+    left: 7%;
+  }
+  .hud-right {
+    right: 7%;
+  }
+  .hud .hud-kicker {
+    font-size: 5px;
+    letter-spacing: 1px;
+  }
+  .hud > strong {
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .hud > strong em {
+    font-size: 9px;
+    margin-left: 1px;
+  }
+  .hud > b {
+    font-size: 20px;
+  }
+  .hud-rule {
+    width: 100px;
+  }
+  .hud > span > b {
+    margin-left: 5px;
+  }
+  .hud .target-signal {
+    font-size: 5px;
+  }
+  .canopy {
+    width: 16px;
+  }
+  .canopy-left {
+    left: 0;
+    transform: rotate(-12deg);
+  }
+  .canopy-right {
+    right: 0;
+    transform: rotate(12deg);
+  }
+  .overhead-bar {
+    left: 0;
+    right: 0;
+    padding: 0 15px;
+    clip-path: none;
+    font-size: 6px;
+    letter-spacing: 0.5px;
+  }
+  .overhead-bar #phase-label {
+    font-size: 6px;
+  }
+  .compass {
+    top: 55px;
+    gap: 9px;
+    font-size: 7px;
+  }
+  .flight-reticle {
+    top: 57%;
+  }
+  .flight-reticle > span {
+    width: 14px;
+  }
+  .flight-reticle small {
+    font-size: 5px;
+    letter-spacing: 1px;
+    top: 37px;
+  }
+  .flight-alert {
+    font-size: 7px;
+    top: 76%;
+    letter-spacing: 1px;
+  }
+  .windshield-bottom {
+    left: 8%;
+    right: 8%;
+    font-size: 6px;
+    letter-spacing: 0.2px;
+    bottom: 24px;
+  }
+  .windshield-bottom #flight-instruction {
+    display: none;
+  }
+  .instrument-deck {
+    padding: 0 12px;
+  }
+  .deck-label {
+    font-size: 7px;
+    letter-spacing: 0.5px;
+  }
+  .control-strip {
+    gap: 9px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 14px 0;
+  }
+  .control-group {
+    display: contents;
+  }
+  .control-button,
+  .control-button.primary,
+  .control-button.new {
+    min-width: 0;
+    justify-content: center;
+    font-size: 10px;
+    min-height: 45px;
+    gap: 10px;
+    padding: 0 8px;
+  }
+  .deck-footer {
+    font-size: 6px;
+    letter-spacing: 0.3px;
+  }
+  .deck-footer > span:nth-child(2) {
+    display: none;
+  }
+  .dialog-content {
+    padding: 23px;
+  }
+  .dialog-content h2 {
+    font-size: 25px;
+  }
+}
