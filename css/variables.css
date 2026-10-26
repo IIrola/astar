@@ -17,6 +17,24 @@
   --danger: #ef7b74;
   --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 }
+.scene-loading {
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  text-align: center;
+  font: 11px var(--mono);
+  letter-spacing: 2px;
+  color: #b4cbb9;
+}
+.scene-loading span {
+  display: block;
+  margin-top: 15px;
+  font-size: 7px;
+  letter-spacing: 3px;
+  color: #688680;
+}
 * {
   box-sizing: border-box;
 }

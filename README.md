@@ -7,8 +7,9 @@ Simulador de persecución en primera persona: cabina WebGL, radar táctico simul
 Requiere Node.js **20.19+** (o **22.12+**, incluido Node 24) y npm.
 
 ```sh
-cd /workspace/astar
-npm ci --cache /workspace/.cache/npm
+git clone https://github.com/IIrola/astar.git
+cd astar
+npm ci
 npm run dev -- --port 5173 --strictPort
 ```
 
@@ -32,8 +33,18 @@ Para las pruebas E2E debe estar ejecutándose el servidor de desarrollo. Se usa 
 - **Audio:** síntesis Web Audio local, activada por una interacción del usuario.
 - **Bloqueo:** se aplica a la siguiente misión y encierra el destino entre obstáculos, para observar el agotamiento de Open Set.
 - **Guía de vuelo / ?:** explica los instrumentos y las reglas de navegación. Los atajos se suspenden al editar controles o abrir la guía.
+- **Imagen:** Cinemática activa sombras y posprocesado con bloom moderado; Equilibrada reduce la resolución del mundo 3D y desactiva esos efectos, manteniendo el HUD nítido. El escritorio comienza en Cinemática y las pantallas pequeñas en Equilibrada. `?quality=balanced` permite abrir directamente el modo ligero.
+- **Monitores en móvil:** los botones MAPA, VUELO, ESCÁNER, A\* y BITÁCORA cambian la pantalla de la consola. Las flechas del teclado recorren estos botones sin mover la nave.
 
 Las misiones son reproducibles mediante `?seed=ORION-042`. Añade `&blocked=1` para el escenario inaccesible. La semilla inicial está elegida para mostrar descubrimientos, desvíos y maniobras de reversa.
+
+## Cabina integrada
+
+El mundo 3D ocupa el fondo completo de la vista del piloto. La estructura del parabrisas es geometría tridimensional unida a la cámara; los datos de vuelo se proyectan sobre el cristal y los cinco MFD quedan montados en la consola inferior con perspectiva y marcos físicos. En móvil se usa un monitor seleccionable dentro de esa misma cabina; la página no se desplaza a otra sección para consultar los instrumentos.
+
+Si el sistema tiene activada la preferencia de movimiento reducido, los cambios de nodo y el regreso se muestran sin giros ni traslaciones animadas, y el reinicio omite el efecto warp. El rumbo, el coste y el historial conservan el mismo comportamiento.
+
+Los asteroides tienen geometría deformada con normales suavizadas, textura y relieve. La nave fugitiva incorpora fuselaje, cabina, alas, góndolas y toberas. Los portales tienen armadura y segmentos luminosos. La iluminación combina luz direccional, reflejos de entorno y luz local de cabina, con tone mapping ACES. El planeta usa mapas de color y normales locales de 2048 píxeles, nubes independientes y una capa atmosférica. Los créditos y la licencia de las texturas se encuentran en `public/licenses/`.
 
 ## Contratos del dominio
 
@@ -75,4 +86,4 @@ Solo hace falta acceso al registro npm para instalar dependencias (`registry.npm
 
 ## Límites
 
-La vista 3D necesita WebGL. Si no está disponible, la interfaz informa del problema y mantiene el radar y la simulación operativos; esa alternativa no sustituye la experiencia POV. Los gráficos son procedurales y estilizados, sin colisiones físicas continuas: la cuadrícula determina los movimientos válidos. No hay guardado de partidas entre recargas; las semillas reproducen el mapa y el historial existe durante la sesión.
+La vista 3D necesita WebGL. Si no está disponible, la interfaz informa del problema y mantiene el radar y la simulación operativos; esa alternativa no sustituye la experiencia POV. La calidad Cinemática consume más GPU; Equilibrada conserva la cabina, los modelos y las texturas con menor coste de renderizado. La cuadrícula determina los movimientos válidos, sin colisiones físicas continuas. No hay guardado de partidas entre recargas; las semillas reproducen el mapa y el historial existe durante la sesión.

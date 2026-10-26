@@ -12,8 +12,13 @@ const ui = new CockpitUI(simulation);
 const audio = new Synthesizer();
 let scene;
 try {
-  scene = new SpaceScene(document.getElementById('space-view'));
+  scene = new SpaceScene(document.getElementById('space-view'), { quality: params.get('quality') });
   scene.reset(simulation.graph, simulation.state);
+  document.getElementById('scene-loading').hidden = true;
+  const qualityControl = document.getElementById('render-quality');
+  qualityControl.value = scene.quality;
+  scene.setQuality(scene.quality);
+  qualityControl.addEventListener('change', () => scene.setQuality(qualityControl.value));
   scene.onContextLost = () => {
     simulation.stopAuto();
     simulation.emit();
@@ -25,6 +30,9 @@ try {
   simulation.bus.on('change', (state) => scene.update(state));
   simulation.bus.on('reset', (state) => scene.reset(simulation.graph, state));
 } catch (error) {
+  document.getElementById('scene-loading').hidden = true;
+  document.getElementById('render-quality').disabled = true;
+  scene = null;
   console.warn('WebGL no disponible:', error);
   const note = document.createElement('p');
   note.className = 'webgl-fallback';
@@ -94,6 +102,7 @@ Object.defineProperty(window, 'orion', {
       auto: simulation.auto,
       history: simulation.history.size,
       webgl: Boolean(scene),
+      quality: scene?.quality ?? null,
     }),
   }),
 });

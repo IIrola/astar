@@ -19,8 +19,50 @@ export class CockpitUI {
   constructor(simulation) {
     this.sim = simulation;
     this.elements = new Map();
+    document.querySelector('.math-grid').append(document.querySelector('.f-line'));
+    const screens = {
+      map: 'radar',
+      telemetry: 'telemetry',
+      scanner: 'scanner',
+      open: 'open',
+      log: 'log',
+    };
+    const tabs = [...document.querySelectorAll('.mfd-tabs [role=tab]')];
+    const selectScreen = (name) => {
+      document.querySelector('.flight-deck').dataset.mfd = name;
+      tabs.forEach((tab) => {
+        const selected = tab.dataset.screen === name;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+    };
+    for (const [name, selector] of Object.entries(screens)) {
+      const panel = document.querySelector(`.${selector}-panel`);
+      panel.id = `mfd-${name}`;
+      panel.setAttribute('aria-label', document.getElementById(`tab-${name}`).textContent);
+    }
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => selectScreen(tab.dataset.screen));
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const next =
+          event.key === 'Home'
+            ? 0
+            : event.key === 'End'
+              ? tabs.length - 1
+              : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        selectScreen(tabs[next].dataset.screen);
+        tabs[next].focus();
+      });
+    });
     this.radar = new TacticalRadar(this.el('radar'), this.el('radar-tooltip'));
-    for (const [id, name] of [['back-button', 'back'], ['step-button', 'step'], ['new-button', 'new']]) {
+    for (const [id, name] of [
+      ['back-button', 'back'],
+      ['step-button', 'step'],
+      ['new-button', 'new'],
+    ]) {
       this.el(id).querySelector('span').innerHTML = icon(name);
     }
     this.el('step-button').addEventListener('click', () => {
@@ -254,7 +296,7 @@ export class CockpitUI {
       return;
     }
     const rows = state.open
-      .slice(0, 4)
+      .slice(0, 3)
       .map((n) => {
         const p = coords(n.id);
         return `<tr><td>(${pad(p.x)},${pad(p.z)})</td><td>${n.g}</td><td>${n.h}</td><td>${n.f}</td></tr>`;

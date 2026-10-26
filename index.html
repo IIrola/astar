@@ -12,7 +12,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <div class="flight-deck">
+    <div class="flight-deck" data-mfd="map">
       <header class="masthead">
         <a class="brand" href="./" aria-label="ORION, inicio"
           ><span class="brand-mark">◈</span><span>ORION<small>FLIGHT SYSTEMS</small></span></a
@@ -35,9 +35,20 @@
         </div>
       </header>
 
-      <main>
+      <main aria-label="Cabina de pilotaje integrada">
+        <label class="quality-control" for="render-quality"
+          ><span>IMAGEN</span
+          ><select id="render-quality" aria-label="Calidad gráfica">
+            <option value="balanced">Equilibrada</option>
+            <option value="cinematic">Cinemática</option>
+          </select></label
+        >
         <section class="windshield" aria-label="Vista de pilotaje 3D">
-          <div id="space-view"></div>
+          <div id="space-view">
+            <div id="scene-loading" class="scene-loading">
+              ENCENDIENDO SISTEMAS DE VUELO<span>RAPTOR 07 · CONEXIÓN DEL VISOR</span>
+            </div>
+          </div>
           <div class="window-vignette"></div>
           <div class="canopy canopy-left"></div>
           <div class="canopy canopy-right"></div>
@@ -64,6 +75,14 @@
             <span>270</span><i></i><span>000</span><i></i><b id="compass-heading">090</b><i></i
             ><span>180</span><i></i><span>270</span>
           </div>
+          <div class="pitch-ladder" aria-hidden="true">
+            <svg viewBox="0 0 190 190" fill="none" stroke="currentColor" stroke-width="0.7">
+              <path
+                d="M48 28h27m40 0h27M53 62h23m38 0h23M30 95h37m56 0h37M53 128h23m38 0h23M48 162h27m40 0h27"
+              />
+              <path d="M48 28v5m94-5v5M53 62v4m84-4v4M53 128v-4m84 4v-4M48 162v-5m94 5v-5" />
+            </svg>
+          </div>
           <div class="flight-reticle" aria-hidden="true">
             <span></span><i></i><b>+</b><i></i><span></span
             ><small id="reticle-label">RUTA TRAZADA</small>
@@ -84,6 +103,58 @@
               >REPEATED FORWARD A* <i>/</i> EXPLORAR. RECALCULAR. INTERCEPTAR.</span
             ><span id="mission-seed">MISIÓN ORION-042</span>
           </div>
+          <div class="mfd-tabs" role="tablist" aria-label="Monitor de cabina">
+            <button
+              type="button"
+              id="tab-map"
+              role="tab"
+              data-screen="map"
+              aria-controls="mfd-map"
+              aria-selected="true"
+            >
+              MAPA</button
+            ><button
+              type="button"
+              id="tab-telemetry"
+              role="tab"
+              data-screen="telemetry"
+              aria-controls="mfd-telemetry"
+              aria-selected="false"
+              tabindex="-1"
+            >
+              VUELO</button
+            ><button
+              type="button"
+              id="tab-scanner"
+              role="tab"
+              data-screen="scanner"
+              aria-controls="mfd-scanner"
+              aria-selected="false"
+              tabindex="-1"
+            >
+              ESCÁNER</button
+            ><button
+              type="button"
+              id="tab-open"
+              role="tab"
+              data-screen="open"
+              aria-controls="mfd-open"
+              aria-selected="false"
+              tabindex="-1"
+            >
+              A*</button
+            ><button
+              type="button"
+              id="tab-log"
+              role="tab"
+              data-screen="log"
+              aria-controls="mfd-log"
+              aria-selected="false"
+              tabindex="-1"
+            >
+              BITÁCORA
+            </button>
+          </div>
           <div class="mfd-grid">
             <section class="mfd telemetry-panel">
               <header class="mfd-header">
@@ -95,7 +166,7 @@
                   <span>NODO ACTUAL <i>n</i></span
                   ><b id="node-value">(01, 07)</b>
                 </div>
-                <div class="math-grid">
+                <div class="math-grid" aria-label="Coste real, heurística y prioridad A estrella">
                   <div>
                     <span>COSTE REAL <i>g(n)</i></span
                     ><strong id="g-value">00</strong><small>COMBUSTIBLE</small>
@@ -106,7 +177,7 @@
                   </div>
                 </div>
                 <div class="f-line">
-                  <span>PRIORIDAD <i>f = g + h</i></span
+                  <span>PRIORIDAD <i title="f(n) = g(n) + h(n)">f(n)</i></span
                   ><strong id="f-value">22</strong>
                 </div>
                 <div class="telemetry-footer">

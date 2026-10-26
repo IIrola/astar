@@ -35,7 +35,12 @@ export class PilotCameraRig {
   }
   async fly({ from, to, heading, turning, speed, onMove }) {
     const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    const factor = reduced ? 0.08 : 1;
+    if (reduced) {
+      this.snap(to, heading);
+      onMove();
+      return;
+    }
+    const factor = 1;
     this.moving = true;
     try {
       const targetYaw = this.headingYaw(heading);
